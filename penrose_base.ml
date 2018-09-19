@@ -4,7 +4,7 @@ open Graphics;;
 (* DEFINE const *)
 let screen_width = 800;;
 let screen_height = 600;;
-let fill_screen = false;;
+let fill_screen = true;;
 (* DEFINE NUMERICAL CONST *)
 let phi = (1.0 +. sqrt(5.0))/.2.0
 
@@ -14,7 +14,7 @@ type point = (float * float);;
 (* DEFINE operators on points *)
 let (++) p1 p2 = let x1,y1 = p1 and x2,y2 = p2 in (x1 +. x2, y1 +. y2);;
 let (--) p1 p2 = let x1,y1 = p1 and x2,y2 = p2 in (x1 -. x2, y1 -. y2);;
-let (@@) p lambda = let x1,y1 = p in (x1 *. lambda, y1 *. lambda);;
+let ( ** ) p lambda = let x1,y1 = p in (x1 *. lambda, y1 *. lambda);;
 let (//) p lambda = let x1,y1 = p in (x1 /. lambda, y1 /. lambda);;
 let norm p1 = let x1,y1 = p1 in (x1*.x1 +. y1*.y1);;
 
@@ -87,4 +87,4 @@ set_window_title "My Superb fractal";;
 (* compute first triangle size *)
 let first_triangle = compute_first_triangle fill_screen screen_width screen_height;;
 (* finally compute the penrose tessellation *)
-divide 8 first_triangle Obtuse;;
+divide 10 first_triangle Obtuse;;
