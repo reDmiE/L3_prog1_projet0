@@ -5,7 +5,7 @@ open Unix;;
 (* DEFINE const *)
 let screen_width = 800;;
 let screen_height = 600;;
-let fill_screen = true;;
+let fill_screen = false;;
 (* DEFINE NUMERICAL CONST *)
 let phi = (1.0 +. sqrt(5.0))/.2.0
 
@@ -110,7 +110,9 @@ set_window_title "My Superb fractal";;
 (* compute first triangle size *)
 let first_triangle = compute_first_triangle fill_screen screen_width screen_height;;
 (* finally compute the penrose tessellation *)
-for i=0 to 9 do
+auto_synchronize false;;
+for i=0 to 10 do
         divide i first_triangle Obtuse;
+        synchronize ();
         Unix.sleepf 0.5;
 done;;
