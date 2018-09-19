@@ -1,6 +1,3 @@
-#load "graphics.cma";;
-open Graphics;;
-
 #load "api_triangle.cma";;
 open Api_triangle;;
 
