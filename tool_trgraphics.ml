@@ -33,6 +33,12 @@ let draw_triangle atriangle=
                 set_color cyan;
         fill_poly coordpoints;;
 
+let draw_line (p0 :point) (p1 :point)=
+        set_color black;
+        let points = coordvect_of_pointvect [|p0; p1|]
+        in let x0,y0 = points.(0) and x1,y1 = points.(1) in
+        moveto x0 y0; lineto x1 y1;;
+
 let create_window screen_width screen_height=
         let param=" "^(string_of_int screen_width)^"x"^(string_of_int screen_height)^"-0+0" in open_graph param;
         set_window_title "My Superb fractal";;
