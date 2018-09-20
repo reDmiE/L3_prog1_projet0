@@ -8,15 +8,8 @@ $(APINAME).mli: $(APINAME).ml
 	ocamlc -i $(APINAME).ml > $(APINAME).mli
 
 clean:
-	rm -f times.data
-	rm -f times.pdf
-	rm -f $(APINAME).cmo
-	rm -f $(APINAME).cmi
+	rm -f times.data times.pdf $(APINAME).cmo $(APINAME).cmi
 cleanall:
-	rm -f $(APINAME).cma
-	rm -f times.data
-	rm -f times.pdf
-	rm -f $(APINAME).cmo
-	rm -f $(APINAME).cmi
+	rm -f $(APINAME).cma times.data times.pdf $(APINAME).cmo $(APINAME).cmi
 
 .PHONY: clean cleanall
