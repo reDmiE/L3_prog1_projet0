@@ -20,6 +20,7 @@ There ! Is the **Ultimate** version where you can move around:
 ./run_penrose_anime.sh
 ```
 Use: `z` `q` `s` `d` to move, `a` to zoom, `w` to draw the next generation and `e` to exit
+
 Note: This one *does not need* a number as argument
 
 Global Note: be sure to be in the directory before running the script
