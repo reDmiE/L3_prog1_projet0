@@ -18,8 +18,10 @@ let hanoi3_rec start inter goal n =
 let add_result file n t = fprintf file "%d,%d\n" n t;;
 
 let store_hanoi3_results f =
-  let file = open_out "results.dat" in
-  for n=1 to 10 do
-    add_result file n (f "a" "b" "c" n);
+  let file = open_out "times.data" in
+  for n = 1 to 10 do
+    add_result file n (f "A" "B" "C" n);
   done;
   close_out file;;
+
+store_hanoi3_results hanoi3_rec;;
