@@ -1,42 +1,81 @@
 #load "graphics.cma"
+#load "api_rod.cma"
+#load "unix.cma"
 open Graphics
-open Printf
+open Unix
+open Api_rod
 
-type rod = {name : string; mutable size : int; mutable discs : int list};;
+let width  = 800;;
+let height = 600;;
+let sleep_time = 0.25;;
 
-let push rod x =
-  rod.size <- rod.size+1;
-  rod.discs <- x::rod.discs;;
+let init_window w h title =
+  open_graph "";
+  set_window_title title;
+  resize_window w h;;
 
-let pop rod =
-  match rod.discs with
-  | [] -> failwith "pop : Rod is empty!"
-  | h::q -> rod.discs <- q;
-            rod.size <- rod.size-1;
-            h;;
+(*count the number of discs in an array of rods*)
+let count_disc rods =
+  let s = ref 0 in
+  for i = 0 to (Array.length rods)-1 do
+    s := !s + (get_size rods.(i));
+  done;
+  !s;;
 
-let is_empty rod = rod.size == 0;;
+(*coords are the center of the disc*)
+let draw_disc x y w h =
+  fill_poly [|(x-w/2, y-h/2); (x+w/2, y-h/2); (x+w/2, y+h/2); (x-w/2, y+h/2)|];;
 
-let top rod =
-  match rod.discs with
-  | [] -> failwith "top : Rod is empty!"
-  | h::q -> h;;
+(*just draw the current state of the game*)
+let draw_state rods colored_disc color =
+  clear_graph ();
+  set_color black;
+  let n = count_disc rods in
+  let w = (size_x ()) / (Array.length rods) and h = (size_y ()) / (2*n) in
 
-let init_rod n name =
-  let rec aux n rod =
-    match n with
-    | 0 -> rod
-    | k when k < 0 -> failwith "Invalid parameter in init_rod : number of disc should be >= 0"
-    | _ -> aux (n-1) (n::rod)
-  in {name = name; size = n; discs = (aux n [])};;
+  (*the y coord is the y coord of the disc at the top*)
+  let rec draw_rod x y rod =
+    if not (is_empty rod) then
+    begin
+      let disc = pop rod in
+
+      draw_rod x (y-h) rod;
+      if disc = colored_disc then
+        set_color color
+      else
+        set_color black;
+
+      draw_disc x y (w*disc/n) h;
+
+      push rod disc;
+    end;
+  in
+
+  for i = 0 to (Array.length rods)-1 do
+    let y_top_disc = (get_size rods.(i))*h-(h/2) in
+    let x = ((w/2)+i*w) in
+    draw_rod x y_top_disc rods.(i);
+  done;;
 
 
-
-let print_movement origin destination = print_string ("I move a disc from rod "^origin^" to rod "^destination^"\n");;
+let print_movement origin destination =
+  print_string ("I move a disc from rod "^origin^" to rod "^destination^"\n");;
 
 let movement rods origin destination =
-  print_movement rods.(origin).name rods.(destination).name;
-  push rods.(destination) (pop rods.(origin));;
+  let rod_o = rods.(origin) and rod_d = rods.(destination) in
+  let disc = top rod_o in
+
+  draw_state rods disc red;
+  Unix.sleepf sleep_time;
+
+  print_movement (get_name rod_o) (get_name rod_d);
+  move rod_d rod_o;
+
+  draw_state rods disc red;
+  Unix.sleepf sleep_time;
+  draw_state rods disc black;
+  Unix.sleepf sleep_time;;
+
 
 let hanoi3_rec start inter goal n =
   let count = ref 0
@@ -51,9 +90,6 @@ let hanoi3_rec start inter goal n =
             aux inter start goal (n-1);
   in aux 0 1 2 n;
   !count;;
-
-print_int (hanoi3_rec "a" "b" "c" 4);;
-print_newline ();;
 
 (*make only possible move with two given rods*)
 let do_possible_move rods rod1 rod2 =
@@ -74,7 +110,7 @@ let hanoi3_iter start inter goal n =
   and count = ref 0 in
 
   (* two moves per iteration, since we do 2^n-1 moves, just stop before the last move (smallest disc)*)
-  while rods.(2).size <> n-1 do
+  while (get_size rods.(2)) <> n-1 do
     (*move the smallest disc, according to the direction*)
     let next_smlst_pos = (!smallest_pos + direction + 3) mod 3 in
     movement rods !smallest_pos next_smlst_pos;
@@ -96,47 +132,19 @@ let hanoi3_iter start inter goal n =
 
   !count+1;;
 
-print_int (hanoi3_iter "a" "b" "c" 4);;
-print_newline ();;
-
 (*give the id of the disc moved at step k, just write k in binary and find the first 0!*)
 (*easily doable by any human begin (able to write numbers in binary)*)
 (*first step has id 0!*)
 let rec disc_moved_at_step k =
   match k mod 2 with
   | 0 -> 1
-  | _ -> 1 + disc_moved_at_step (k/2);;
-
-let get_disc_context_first_move d n =
-  if (n-d) mod 2 == 0 then [|0; 1; 2|]
-  else [|0; 2; 1|];;
-
-let pow2 n = 1 lsl n;;
-
-let rec get_step_info k n =
-  let disc_id = disc_moved_at_step k in
-  let context_first_move = get_disc_context_first_move disc_id n in
-  let offset = pow2 disc_id in
-  let move_count = k/offset in
-  print_string "DISC : "; print_int disc_id; print_newline ();
-  print_string "ALREADY MOVED "; print_int move_count; print_string " TIME(S)"; print_newline ();;
-  (*print_string "MOVE FROM ROD "; print_int context_first_move.(move_count+2 mod 3); print_string " TO ROD "; print_int context_first_move.(move_count+1 mod 3); print_newline ();;*)
+  | _ -> 1 + disc_moved_at_step (k / 2);;
 
 
-
-let add_result file n t = fprintf file "%d,%d\n" n t;;
-
-let store_hanoi3_results f =
-  let file = open_out "results.dat" in
-  for n=1 to 10 do
-    add_result file n (f "a" "b" "c" n);
-  done;
-  close_out file;;
+init_window width height "Hanoi3";;
+hanoi3_rec "A" "B" "C" (int_of_string Sys.argv.(1));;
 
 
-let draw_disc n i x y =
-  let w = 200/(n-i) and h = 400/n in
-  fill_poly [|(x-w/2, y-h/2); (x+w/2, y-h/2); (x+w/2, y+h/2); (x-w/2, y+h/2)|];;
-
-
-  (*let draw_state n rods = *)
+prerr_string "Type Return to exit...";;
+prerr_newline ();;
+read_line ();;

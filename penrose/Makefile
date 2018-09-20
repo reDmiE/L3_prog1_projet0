@@ -1,4 +1,3 @@
-
 APINAME=api_triangle
 
 $(APINAME).cma: $(APINAME).ml
@@ -8,8 +7,10 @@ $(APINAME).cma: $(APINAME).ml
 
 $(APINAME).mli: $(APINAME).ml
 	ocamlc -i $(APINAME).ml > $(APINAME).mli
+
 clean:
 	rm $(APINAME).cmo
+
 cleanall:
 	rm $(APINAME).cmo $(APINAME).cma $(APINAME).cmi
 
