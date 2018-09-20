@@ -7,7 +7,6 @@ open Api_triangle;;
 let screen_width = 800;;
 let screen_height = 600;;
 let fill_screen = true;;
-let generation = 9;;
 (* DEFINE NUMERICAL CONST *)
 let phi = (1.0 +. sqrt(5.0))/.2.0
 
