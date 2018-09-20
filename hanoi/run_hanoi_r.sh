@@ -1,5 +1,4 @@
-#!/bin/sh
-if [ $# -eq 1 ]
+if [ $# -eq 0 ]
 then
   make
   ocaml hanoi_r.ml
@@ -9,5 +8,5 @@ then
   ocaml hanoi_ext.ml $1
   make clean
 else
-  echo "Usage : $0 <number_of_discs>"
+  echo "Usage : $0"
 fi
