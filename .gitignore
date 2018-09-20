@@ -10,6 +10,8 @@
 
 # ocamlbuild working directory
 _build/
+penrose/build
+penrose/api
 
 # ocamlbuild targets
 *.byte

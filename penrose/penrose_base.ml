@@ -1,7 +1,7 @@
 #load "api_triangle.cma";;
 open Api_triangle;;
 
-#use "tool_trgraphics.ml";;
+#use "trgraphics.ml";;
 
 (* DEFINE const *)
 let screen_width = 800;;
@@ -46,7 +46,7 @@ let rec divide generation atriangle =
 
 create_window screen_width screen_height;;
 let first_triangle = compute_first_triangle fill_screen screen_width screen_height
-in divide generation first_triangle;;
+in divide (int_of_string Sys.argv.(1)) first_triangle;;
 
 (* wait before closing *)
 prerr_string "Type Return to exit...";;

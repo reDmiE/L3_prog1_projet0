@@ -10,8 +10,11 @@ let ( ** ) (p :point) (lambda :float)= let x1,y1 = p in let p1 = (x1 *. lambda, 
 let (//) (p :point) (lambda :float)= let x1,y1 = p in let p1 = (x1 /. lambda, y1 /. lambda) in (p1 :point);;
 let norm (p1 :point) = let x1,y1 = p1 in let n = (x1*.x1 +. y1*.y1) in (n :float);;
 
+let scale (p1 :point) factor = let x1,y1 = p1 in let p = (x1 *. factor, y1 *. factor) in (p :point);;
+let translate (p1 :point) xoffset yoffset = let x1,y1 = p1 in let p = (x1 +. xoffset, y1 +. yoffset) in (p :point);;
 (* DEFINE functions *)
 
+let new_point x y = ((x,y):point);;
 (* for triangles *)
 let new_triangle p0 p1 p2 is_acute =
         let trpoints = ([|p0;p1;p2|] :point array) in
