@@ -5,9 +5,14 @@ open Graphics
 open Unix
 open Api_rod
 
+(* CONSTANTS *)
+
 let width  = 800;;
 let height = 600;;
 let sleep_time = 0.25;;
+
+
+(* GRAPHICS RELATED FUNCTIONS *)
 
 let init_window w h title =
   open_graph "";
@@ -57,6 +62,8 @@ let draw_state rods colored_disc color =
     draw_rod x y_top_disc rods.(i);
   done;;
 
+
+(* HANOI RELATED FUNCTIONS *)
 
 let print_movement origin destination =
   print_string ("I move a disc from rod "^origin^" to rod "^destination^"\n");;
@@ -140,6 +147,9 @@ let rec disc_moved_at_step k =
   | 0 -> 1
   | _ -> 1 + disc_moved_at_step (k / 2);;
 
+
+
+(* START SOLVING *)
 
 init_window width height "Hanoi3";;
 hanoi3_rec "A" "B" "C" (int_of_string Sys.argv.(1));;
