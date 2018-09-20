@@ -17,11 +17,11 @@ let hanoi3_rec start inter goal n =
 
 let add_result file n t = fprintf file "%d,%d\n" n t;;
 
-let store_hanoi3_results f =
+let store_hanoi3_results f k =
   let file = open_out "times.data" in
-  for n = 1 to 10 do
+  for n = 1 to k do
     add_result file n (f "A" "B" "C" n);
   done;
   close_out file;;
 
-store_hanoi3_results hanoi3_rec;;
+store_hanoi3_results hanoi3_rec (int_of_string Sys.argv.(1));;
