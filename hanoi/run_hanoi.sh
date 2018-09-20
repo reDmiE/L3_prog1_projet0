@@ -9,5 +9,5 @@ then
   ocaml hanoi_ext.ml $1
   make clean
 else
-  echo "Usage : ./run_hanoi.sh <number_of_discs>"
+  echo "Usage : $0 <number_of_discs>"
 fi
