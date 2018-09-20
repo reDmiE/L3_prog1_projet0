@@ -5,5 +5,5 @@ then
   ocaml penrose_base.ml $1
   make clean
 else
-  echo "Usage : ./run_hanoi.sh <number_of_discs>"
+  echo "Usage : $0 <number_of_iterations>"
 fi

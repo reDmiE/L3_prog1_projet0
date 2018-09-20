@@ -9,9 +9,9 @@ $(APINAME).mli: $(APINAME).ml
 	ocamlc -i $(APINAME).ml > $(APINAME).mli
 
 clean:
-	rm $(APINAME).cmo
+	rm -f $(APINAME).cmo
 
 cleanall:
-	rm $(APINAME).cmo $(APINAME).cma $(APINAME).cmi
+	rm -f $(APINAME).cmo $(APINAME).cma $(APINAME).cmi
 
 .PHONY: clean cleanall

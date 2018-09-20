@@ -68,10 +68,10 @@ type environnement = { mutable table:triangle list; mutable scale:float; mutable
 
 let gen_handle_key nextstep drawfonction env c = 
         (match c with
-        |'q' -> env.offset <-  env.offset ++ (2.0,0.0)
-        |'d' -> env.offset <-  env.offset -- (2.0,0.0)
-        |'z' -> env.offset <-  env.offset -- (0.0,2.0)
-        |'s' -> env.offset <-  env.offset ++ (0.0,2.0)
+        |'q' -> env.offset <-  env.offset ++ (new_point 2.0 0.0)
+        |'d' -> env.offset <-  env.offset -- (new_point 2.0 0.0)
+        |'z' -> env.offset <-  env.offset -- (new_point 0.0 2.0)
+        |'s' -> env.offset <-  env.offset ++ (new_point 0.0 2.0)
         |'w' -> nextstep env
         |'a' -> env.scale <- (env.scale +. 0.2)
         |'e' -> raise End
