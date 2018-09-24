@@ -24,11 +24,19 @@
 %\setbeamertemplate{navigation symbols}{} 
 %\logo{} 
 \institute{L3, ENS Rennes} 
-\date{Septembre 2018} 
+\date{Septembre 2018}
+
+% Custom commands
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ddp}{\displaystyle}
 %\subject{} 
 
 % Fine tuning
-\setlength{\parskip}{0.5\baselineskip}%
+%\setlength{\parskip}{0.5\baselineskip}%
+%%%
+%%%
+% SET FRAME TO [fragile] whenever you have to use minted !!!
 
 \begin{document}
 \beamertemplatenavigationsymbolsempty
@@ -40,9 +48,27 @@
 \begin{frame}
 \tableofcontents
 \end{frame}
-
-\begin{frame}{•}
-test
+\section{Tours de Hanoï}
+\begin{frame}[fragile]%{•}
+\frametitle{Foo1}
+\begin{minted}{ocaml}
+let a = 1
+in begin
+  print_int a;
+  print_newline()
+end
+\end{minted}
+\end{frame}
+\section{Pavage de Penrose}
+\begin{frame}[fragile]%{•}
+\frametitle{Foo2}
+\begin{minted}{ocaml}
+let a = 1
+in begin
+  print_int a;
+  print_newline()
+end
+\end{minted}
 \end{frame}
 
 \end{document}
