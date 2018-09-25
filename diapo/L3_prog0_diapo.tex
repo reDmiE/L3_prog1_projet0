@@ -19,8 +19,16 @@
 % for algorithm
 \usepackage[french, onelanguage]{algorithm2e}
 \usepackage{algorithmic}
+% for tree
+\usepackage{tikz}
+
+\usepackage{ragged2e}
+
+
 
 \RestyleAlgo{boxruled}
+\SetAlCapHSkip{0.5em}
+\IncMargin{1em}
 
 \author{Nicolas Bailluet, Rémi Piau}
 \title{Projet 0: Tours de Hanoï et Pavage de Penrose}
@@ -54,51 +62,95 @@
 \section{Tours de Hanoï}
 
 \begin{frame}{Algorithme récursif optimal}
-  \begin{columns}[shrink=20]
-    \begin{column}{.58\textwidth}
-      \begin{algorithm}[H]
-      \SetKwInOut{Input}{Entrées}
-      \caption{Hanoi($n$, $s$, $i$, $d$)}
-      \Input{$n$ : nombre de disques, \newline
-      $s$ : piquet de départ, \newline
-      $i$ : piquet intermédiaire, \newline
-      $d$ : piquet d'arrivée}
-      \If{$n > 1$}{ Hanoi($n-1$, $s$, $d$, $i$)\\
-                    Déplacer un disque de $s$ vers $d$\\
-                    Hanoi($n-1$, $i$, $s$, $d$)}
-      \end{algorithm}
-    \end{column}
-    \hfill
-    \begin{column}{.48\textwidth}
-      $C(n):=$ nombre de coups optimal pour $n$ disques
-      \newline
-      \newline
-      $C(n) =
-      \begin{cases}
-        1 & \mbox{si $n$ = 1}\\
-        2C(n)+1 & \mbox{sinon}
-      \end{cases}
-      $
-      \newline
-      \newline
-      \newline
-      $\Leftrightarrow \boxed{C(n) = 2^{n}-1}$
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Représentation sous forme d'arbre}
-\end{frame}
-
-\begin{frame}{Algorithme itératif optimal}
   \begin{algorithm}[H]
   \SetKwInOut{Input}{Entrées}
   \caption{Hanoi($n$, $s$, $i$, $d$)}
   \Input{$n$ : nombre de disques, \newline
-  $s$ : piquet de départ,
-  $i$ : piquet intermédiaire,
+  $s$ : piquet de départ, \newline
+  $i$ : piquet intermédiaire, \newline
   $d$ : piquet d'arrivée}
-  \While{moins de $n-1$ disques sont sur le piquet $d$}
+  \If{$n > 1$}{ Hanoi($n-1$, $s$, $d$, $i$)\\
+                Déplacer un disque de $s$ vers $d$\\
+                Hanoi($n-1$, $i$, $s$, $d$)}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Complexité}
+  \centering
+  \includegraphics[scale=0.2]{R_curve.png}
+  \begin{block}{Calcul}
+    $C(n) =
+    \begin{cases}
+      1 & \mbox{si $n$ = 1}\\
+      2C(n)+1 & \mbox{sinon}
+    \end{cases}
+    $
+    $\Leftrightarrow \boxed{C(n) = 2^{n}-1}$
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Représentation sous forme d'arbre}
+  \begin{block}{Construction de l'arbre}
+  \begin{center}
+  \scalebox{0.5}{
+  \begin{tikzpicture}[auto,
+    every node/.style={circle,minimum size=3.5em},
+    level/.style = {sibling distance=6em}]
+    \node[draw]{$n$}
+    child {node[draw](a){$n-1$}
+      child {node{$\vdots$}
+        child {node[draw]{$1$}}
+        child {node{$\cdots$}}
+      }
+      child {node{$\vdots$}}
+    }
+    child {node(b)[draw]{$n-1$}
+      child {node{$\vdots$}}
+      child {node{$\vdots$}
+        child {node{$\cdots$}}
+        child {node[draw]{$1$}}
+      }
+    };
+  \end{tikzpicture}}
+  \end{center}
+  \begin{itemize}
+    \justifying
+    \item Disques indicés (taille croissante) de 1 à $n$.
+    \item Arbre complet de hauteur $n$.
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Parcours infixe}
+  \begin{block}{Ordre de déplacement des disques}
+    \begin{itemize}
+    \item
+    $n=4$:
+      \begin{center}
+        $(1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1)$
+      \end{center}
+    \item
+    $n=3$:
+      \begin{center}
+        $(1, 2, 1, 3, 1, 2, 1)$
+      \end{center}
+    \end{itemize}
+  \end{block}
+  \begin{block}{Résultat}
+    \justifying
+    L'indice du disque joué au tour d'ordre $k$
+    correspond à l'indice du premier bit nul dans l'écriture binaire de $k$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Algorithme itératif optimal}
+  \begin{center}
+  \scalebox{0.80}{
+  \begin{algorithm}[H]
+  \SetKwInOut{Input}{Entrées}
+  \caption{Hanoi($n$, $s$, $i$, $d$)}
+  \While{hauteur($d$) $< n-1$}
   {
     \eIf{$n$ est pair}
       {Déplacer le plus petit disque d'un piquet vers la droite}
@@ -106,7 +158,32 @@
     Effectuer le seul mouvement qui ne déplace pas le plus petit disque
   }
   Déplacer le plus petit disque vers $d$
-  \end{algorithm}
+  \end{algorithm}}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Implémentation}
+  \begin{block}{Type abtrait \textit{Rod}}
+    \begin{minted}{ocaml}
+    type rod
+    val push : rod -> int -> unit
+    val pop : rod -> int
+    val is_empty : rod -> bool
+    val top : rod -> int
+    val init_rod : int -> string -> rod
+    val move : rod -> rod -> unit
+    val get_size : rod -> int
+    val get_name : rod -> string
+    \end{minted}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Implémentation}
+  \begin{block}{Animation de la résolution}
+    \begin{center}
+    \includegraphics[scale=0.2]{anim_hanoi.png}
+    \end{center}
+  \end{block}
 \end{frame}
 
 \section{Pavage de Penrose}
