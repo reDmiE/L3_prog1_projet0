@@ -1,4 +1,4 @@
-\documentclass[usenames,dvipsnames,14pt]{beamer}%
+\documentclass[usenames,dvipsnames,serif,14pt]{beamer}%
 \usetheme{Copenhagen}%
 \usepackage[utf8]{inputenc}%
 \usepackage[english]{babel}%
@@ -16,21 +16,27 @@
 \usepackage{minted}%
 % load more color name (in conjuction with dvipsname)
 \usepackage{xcolor}
+% for algorithm
+\usepackage[french, onelanguage]{algorithm2e}
+\usepackage{algorithmic}
+
+\RestyleAlgo{boxruled}
+
 \author{Nicolas Bailluet, Rémi Piau}
 \title{Projet 0: Tours de Hanoï et Pavage de Penrose}
 
 \usecolortheme[named=Mahogany]{structure}
-%\setbeamercovered{transparent} 
-%\setbeamertemplate{navigation symbols}{} 
-%\logo{} 
-\institute{L3, ENS Rennes} 
+%\setbeamercovered{transparent}
+%\setbeamertemplate{navigation symbols}{}
+%\logo{}
+\institute{L3, ENS Rennes}
 \date{Septembre 2018}
 
 % Custom commands
 \newcommand{\ZZ}{\mathbb{Z}}
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\ddp}{\displaystyle}
-%\subject{} 
+%\subject{}
 
 % Fine tuning
 %\setlength{\parskip}{0.5\baselineskip}%
@@ -45,20 +51,64 @@
 \titlepage
 \end{frame}
 
-\begin{frame}
-\tableofcontents
-\end{frame}
 \section{Tours de Hanoï}
-\begin{frame}[fragile]%{•}
-\frametitle{Foo1}
-\begin{minted}{ocaml}
-let a = 1
-in begin
-  print_int a;
-  print_newline()
-end
-\end{minted}
+
+\begin{frame}{Algorithme récursif optimal}
+  \begin{columns}[shrink=20]
+    \begin{column}{.58\textwidth}
+      \begin{algorithm}[H]
+      \SetKwInOut{Input}{Entrées}
+      \caption{Hanoi($n$, $s$, $i$, $d$)}
+      \Input{$n$ : nombre de disques, \newline
+      $s$ : piquet de départ, \newline
+      $i$ : piquet intermédiaire, \newline
+      $d$ : piquet d'arrivée}
+      \If{$n > 1$}{ Hanoi($n-1$, $s$, $d$, $i$)\\
+                    Déplacer un disque de $s$ vers $d$\\
+                    Hanoi($n-1$, $i$, $s$, $d$)}
+      \end{algorithm}
+    \end{column}
+    \hfill
+    \begin{column}{.48\textwidth}
+      $C(n):=$ nombre de coups optimal pour $n$ disques
+      \newline
+      \newline
+      $C(n) =
+      \begin{cases}
+        1 & \mbox{si $n$ = 1}\\
+        2C(n)+1 & \mbox{sinon}
+      \end{cases}
+      $
+      \newline
+      \newline
+      \newline
+      $\Leftrightarrow \boxed{C(n) = 2^{n}-1}$
+    \end{column}
+  \end{columns}
 \end{frame}
+
+\begin{frame}{Représentation sous forme d'arbre}
+\end{frame}
+
+\begin{frame}{Algorithme itératif optimal}
+  \begin{algorithm}[H]
+  \SetKwInOut{Input}{Entrées}
+  \caption{Hanoi($n$, $s$, $i$, $d$)}
+  \Input{$n$ : nombre de disques, \newline
+  $s$ : piquet de départ,
+  $i$ : piquet intermédiaire,
+  $d$ : piquet d'arrivée}
+  \While{moins de $n-1$ disques sont sur le piquet $d$}
+  {
+    \eIf{$n$ est pair}
+      {Déplacer le plus petit disque d'un piquet vers la droite}
+      {Déplacer le plus petit disque d'un piquet vers la gauche}
+    Effectuer le seul mouvement qui ne déplace pas le plus petit disque
+  }
+  Déplacer le plus petit disque vers $d$
+  \end{algorithm}
+\end{frame}
+
 \section{Pavage de Penrose}
 \begin{frame}[fragile]%{•}
 \frametitle{Foo2}
