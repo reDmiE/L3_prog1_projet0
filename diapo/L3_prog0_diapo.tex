@@ -22,6 +22,20 @@
 % for tree
 \usepackage{tikz}
 
+%for floaw chart
+\usetikzlibrary{arrows.meta}
+\tikzset{%
+  >={Latex[width=2mm,length=2mm]},
+  % Specifications for style of nodes:
+            base/.style = {rectangle, rounded corners, draw=black,
+                           minimum width=4cm, minimum height=1cm,
+                           text centered, font=\sffamily},
+  mainFile/.style = {base, fill=blue!30},
+       subFile/.style = {base, fill=red!30},
+    module/.style = {base, fill=green!30},
+        % process/.style = {base, minimum width=2.5cm, fill=orange!15,font=\ttfamily},
+}
+
 \usepackage{ragged2e}
 
 
@@ -59,6 +73,61 @@
 \titlepage
 \end{frame}
 
+\section{Pavage de Penrose}
+\begin{frame}[fragile]%{•}
+\frametitle{Une implémentation modulaire}
+\begin{tikzpicture}[node distance=1.5cm,
+    every node/.style={fill=white, font=\sffamily}, align=center]
+  % Specification of nodes (position, etc.)
+  \node (penrosebase) at (0,0)           [mainFile]          {penrose\_base.ml};
+  \node (trgraphics) at (-3,-2)     [subFile]        {trgraphics.ml};
+  \node (apitriangle) at (3, -2)     [module] {api\_triangle.cma};   
+  % Specification of lines between nodes specified above
+  % with aditional nodes for description 
+  \draw[->]             (penrosebase) -- (apitriangle);
+  \draw[->]     (penrosebase) -- (trgraphics);
+  \draw[->]      (trgraphics) -- (apitriangle);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]%{•}
+\frametitle{Une API pour les triangles}
+\begin{minted}{ocaml}
+type point
+type coord = int * int
+type triangle
+val ( -- ) : point -> point -> point
+val ( // ) : point -> float -> point
+val norm : point -> float
+val new_point : float -> float -> point
+val is_acute : triangle -> bool
+
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]%{•}
+\frametitle{Le pavage un algorithme recursif}
+\scalebox{0.99}{  
+  \begin{algorithm}[H]
+  \SetKwInOut{Input}{Entrées}
+  \caption{Penrose($n$, $t$)}
+  \Input{$n$ : nombre de génération, \newline
+  $t$ : triangle initial}
+  \eIf{$n = 0$}{ dessiner $t$}
+  { Découper $t$ et appliquer Penrose($n-1$,$t_i$) pour chaque sous triangle $t_i$.
+   }
+  \end{algorithm}
+  }
+\end{frame}
+
+
+
+\begin{frame}[fragile]%{•}
+\frametitle{Amélioration déplacement au clavier}
+	\begin{center}
+    		\includegraphics[scale=0.3]{penrose_anime.png}
+    \end{center}
+\end{frame}
 \section{Tours de Hanoï}
 
 \begin{frame}{Algorithme récursif optimal}
@@ -184,18 +253,6 @@
     \includegraphics[scale=0.2]{anim_hanoi.png}
     \end{center}
   \end{block}
-\end{frame}
-
-\section{Pavage de Penrose}
-\begin{frame}[fragile]%{•}
-\frametitle{Foo2}
-\begin{minted}{ocaml}
-let a = 1
-in begin
-  print_int a;
-  print_newline()
-end
-\end{minted}
 \end{frame}
 
 \end{document}
