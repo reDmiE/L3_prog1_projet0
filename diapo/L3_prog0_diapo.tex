@@ -111,7 +111,7 @@ val is_acute : triangle -> bool
   \begin{algorithm}[H]
   \SetKwInOut{Input}{Entrées}
   \caption{Penrose($n$, $t$)}
-  \Input{$n$ : nombre de génération, \newline
+  \Input{$n$ : nombre de générations, \newline
   $t$ : triangle initial}
   \eIf{$n = 0$}{ dessiner $t$}
   { Découper $t$ et appliquer Penrose($n-1$,$t_i$) pour chaque sous triangle $t_i$.
@@ -123,7 +123,7 @@ val is_acute : triangle -> bool
 
 
 \begin{frame}[fragile]%{•}
-\frametitle{Amélioration déplacement au clavier}
+\frametitle{Amélioration: déplacement au clavier}
 	\begin{center}
     		\includegraphics[scale=0.3]{penrose_anime.png}
     \end{center}
@@ -252,6 +252,25 @@ val is_acute : triangle -> bool
     \begin{center}
     \includegraphics[scale=0.2]{anim_hanoi.png}
     \end{center}
+  \end{block}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+\frametitle{Pistes d'amélioration}
+  \begin{block}{Penrose}
+  	\begin{itemize}
+  	\item Rotation dans l'animation.
+  	\item Pouvoir revenir dans les générations.
+  	\item Implémenter d'autres pavages (plus jolis).
+  	\end{itemize}
+  \end{block}
+  \begin{block}{Hanoi}
+  	\begin{itemize}
+  	\item Plus de piquets (Frame-Stewart).
+  	\item Résolution à partir d'un état quelconque.
+  	\item Meilleure animation (plus jolie).
+  	\end{itemize}
   \end{block}
 \end{frame}
 
