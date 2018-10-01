@@ -99,11 +99,11 @@ Nous avons réalisé une interface de programmation \mintinline{text}{api_triang
 
 Cette interface [\ref{code:apitrianglemli}] expose plusieurs types abstraits:
 \begin{itemize}
-	\item les type d'angles, aîgus ou obtus \mintinline{ocaml}{d!!!},
-	\item les points représentés par un couple de flottant i.e. \mintinline{ocaml}{poi!!!},
-	\item les triangle \mintinline{ocaml}{type triangle = !!!}, repésentés par une liste de points et un type d'angle.
+	\item les type d'angles, aîgus ou obtus \mintinline{ocaml}{type angletype = Obtuse | Acute},
+	\item les points représentés par un couple de flottant i.e. \mintinline{ocaml}{type point = (float * float)},
+	\item les triangle \mintinline{ocaml}{type triangle = {points:(point array); typ:angletype}}, repésentés par une liste de points et un type d'angle.
 \end{itemize}
-Ces types ne sont accessibles et manipulables \emph{uniquement} travers des fonctions exposées par l'interface comme la fonction \mintinline{ocaml}{is_acute !!!}. On notera l'implémentation d'opérateurs infixe comme \mintinline{ocaml}{--}(soustraction) ou \mintinline{ocaml}{//}(division par un scalaire) qui permettent de manipuler le type point de manière élégante et plus compréhensible.
+Ces types ne sont accessibles et manipulables \emph{uniquement} travers des fonctions exposées par l'interface comme la fonction \mintinline{ocaml}{is_acute : triangle -> bool}. On notera l'implémentation d'opérateurs infixe comme \mintinline{ocaml}{-- : point -> point -> point}(soustraction) ou \mintinline{ocaml}{// : point -> float -> point}(division par un scalaire) qui permettent de manipuler le type point de manière élégante et plus compréhensible.
 
 \subsubsection{Fichier pour les fonction graphiques: trgraphics.ml}
 Ce fichier contient les fonctions permettant de facilement afficher les différents éléments du pavage (lignes, triangles) ainsi que les outils nécessaires au controle clavier de l'interface.
@@ -126,8 +126,8 @@ Les tours de Hanoï et le pavage de Penrose sont deux problèmes qui possèdent 
 \appendix
 \section{Une annexe: Penrose}
 \newpage
-\begin{figure}
 \begin{algorithm}[H]
+\label{algo:penrose}
   \SetKwInOut{Input}{Entrées}
   \caption{Penrose($n$, $t$)}
   \Input{$n$ : nombre de générations, \newline
@@ -135,9 +135,7 @@ Les tours de Hanoï et le pavage de Penrose sont deux problèmes qui possèdent 
   \eIf{$n = 0$}{ dessiner $t$}
   { Découper $t$ et appliquer Penrose($n-1$,$t_i$) pour chaque sous triangle $t_i$.
    }
-  \end{algorithm}
-  \label{algo:penrose}
- \end{figure}
+\end{algorithm}
   
 \begin{figure}
   \begin{center}
